@@ -1,5 +1,6 @@
 export const configuration = () => ({
     port: parseInt(process.env.PORT, 10) || 5000,
+    db_url: process.env.DATABASE_URL,
     environment: process.env.NODE_ENV,
     db_host: process.env.DB_HOST,
     db_port: parseInt(process.env.DB_PORT, 10) || 5432,
