@@ -45,9 +45,9 @@ model Word {
   isCategorized Boolean  @default(false)
   languageId    String
   language      Language @relation(fields: [languageId], references: [id])
-  categoryId    String
-  category      Category @relation(fields: [categoryId], references: [id])
-
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  createdAt DateTime @default(now())
   users WordToUser[]
 }
 

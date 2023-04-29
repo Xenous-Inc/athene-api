@@ -3,6 +3,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export enum AtheneExceptionCode {
     UserAlreadyExist = 601,
     UserNotFound = 602,
+    WordAlreadyExist = 603,
+    WordNotFound = 604,
 }
 export interface IAtheneExceptionResponse {
     code: AtheneExceptionCode;
