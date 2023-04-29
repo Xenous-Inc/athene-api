@@ -9,6 +9,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { LanguagesModule } from './modules/languages/languages.module';
 import { WordsModule } from './modules/words/words.module';
 import { ClassesModule } from './modules/classes/classes.module';
+import { PrismaModule } from './prisma/prisma.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import { ClassesModule } from './modules/classes/classes.module';
         LanguagesModule,
         WordsModule,
         ClassesModule,
+        PrismaModule,
     ],
     controllers: [AppController],
     providers: [AppService],
