@@ -9,3 +9,87 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             String        @id @default(uuid())
+  name           String
+  phone          String
+  role           UserRole[]    @default([])
+  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime      @default(now())
+  teacherClasses Class[]
+  words          WordToUser[]
+  class          ClassToUser[]
+}
+
+enum UserRole {
+  Teacher
+  Admin
+  Student
+}
+
+model Class {
+  id          String            @id @default(uuid())
+  teacherId   String
+  teacher     User              @relation(fields: [teacherId], references: [id])
+  description String?
+  title       String
+  categories  ClassToCategory[]
+  users       ClassToUser[]
+}
+
+model Word {
+  id            String   @id @default(uuid())
+  value         String
+  translation   String
+  isCategorized Boolean  @default(false)
+  languageId    String
+  language      Language @relation(fields: [languageId], references: [id])
+  categoryId    String
+  category      Category @relation(fields: [categoryId], references: [id])
+
+  users WordToUser[]
+}
+
+model Language {
+  id    String @id @default(uuid())
+  value String
+  words Word[]
+}
+
+model Category {
+  id      String            @id @default(uuid())
+  value   String
+  words   Word[]
+  classes ClassToCategory[]
+}
+
+model ClassToCategory {
+  class      Class    @relation(fields: [classId], references: [id])
+  classId    String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  assignedAt DateTime @default(now())
+
+  @@id([classId, categoryId])
+}
+
+model WordToUser {
+  word       Word     @relation(fields: [wordId], references: [id])
+  wordId     String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  assignedAt DateTime @default(now())
+
+  @@id([wordId, userId])
+}
+
+model ClassToUser {
+  class      Class    @relation(fields: [classId], references: [id])
+  classId    String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  assignedAt DateTime @default(now())
+
+  @@id([classId, userId])
+}
