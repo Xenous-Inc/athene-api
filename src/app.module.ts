@@ -4,6 +4,11 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './config/validation';
 import { configuration } from './config/configuration';
+import { UsersModule } from './modules/users/users.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { LanguagesModule } from './modules/languages/languages.module';
+import { WordsModule } from './modules/words/words.module';
+import { ClassesModule } from './modules/classes/classes.module';
 @Module({
     imports: [
         ConfigModule.forRoot({
@@ -12,6 +17,11 @@ import { configuration } from './config/configuration';
             load: [configuration],
             isGlobal: true,
         }),
+        UsersModule,
+        CategoriesModule,
+        LanguagesModule,
+        WordsModule,
+        ClassesModule,
     ],
     controllers: [AppController],
     providers: [AppService],
