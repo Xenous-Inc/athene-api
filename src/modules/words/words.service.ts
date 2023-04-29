@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { WordAlreadyExistException } from 'src/exceptions/word/word-already-exist.exception';
 import { WordNotFoundException } from 'src/exceptions/word/word-not-found.exception';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateWordDto } from './dto/words.dto';
+import { CreateWordDto } from './dto/create-words.dto';
+import { UpdateWordDto } from './dto/update-words.dto';
 import { WordResponse } from './types/responses';
 
 @Injectable()
@@ -31,6 +32,19 @@ export class WordsService {
             throw new WordNotFoundException();
         }
         return word;
+    }
+    async update(id: string, dto: UpdateWordDto): Promise<WordResponse> {
+        const word = await this.prisma.word.findUnique({
+            where: { id: id },
+        });
+
+        if (!word) {
+            throw new WordNotFoundException();
+        }
+        return this.prisma.word.update({
+            where: { id },
+            data: dto,
+        });
     }
     async delete(id: string) {
         const word = this.prisma.word.findUnique({ where: { id: id } });
