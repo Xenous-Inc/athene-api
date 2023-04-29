@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { validationSchema } from './config/validation';
 import { configuration } from './config/configuration';
-import { UsersModule } from './modules/users/users.module';
+import { UserModule } from './modules/user/user.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { LanguagesModule } from './modules/languages/languages.module';
 import { WordsModule } from './modules/words/words.module';
@@ -18,12 +18,12 @@ import { PrismaModule } from './prisma/prisma.module';
             load: [configuration],
             isGlobal: true,
         }),
-        UsersModule,
+        PrismaModule,
+        UserModule,
         CategoriesModule,
         LanguagesModule,
         WordsModule,
         ClassesModule,
-        PrismaModule,
     ],
     controllers: [AppController],
     providers: [AppService],
