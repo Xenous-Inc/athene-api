@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { AtheneException, AtheneExceptionCode } from '../types';
 
-export class WordAlreadyExist extends AtheneException {
+export class WordAlreadyExistException extends AtheneException {
     constructor() {
         super(
             {
