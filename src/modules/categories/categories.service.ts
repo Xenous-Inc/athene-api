@@ -93,11 +93,22 @@ export class CategoriesService {
     }
 
     async addWordToCategory(dto: WordToCategoryDto, id: string): Promise<CategoryResponse> {
-        const word = await this.prisma.word.update({ where: { id: dto.wordId }, data: { categoryId: id } });
+        const word = await this.prisma.word.findUnique({ where: { id: dto.wordId } });
+        // const newWordToCategory = await this.prisma.wordToCategory.create({
+        //     data: {
+        //         wordId: dto.wordId,
+        //         categoryId: id,
+        //     },
+        // });
+        // const word = await this.prisma.word.update({ where: { id: dto.wordId }, data: { categoryId: id } });
         if (!word) {
             throw new WordNotFoundException();
         }
-        const category = await this.prisma.category.update({ where: { id: id }, data: { words: { connect: word } } });
+
+        const category = await this.prisma.category.update({
+            where: { id: id },
+            data: { words: { connect: { id: word.id } } },
+        });
         if (!category) {
             throw new CategoryNotFoundException();
         }
