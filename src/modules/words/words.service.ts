@@ -32,7 +32,7 @@ export class WordsService {
         }
         return word;
     }
-    async delete(id: string) {
+    async deleteWord(id: string) {
         const word = this.prisma.word.findUnique({ where: { id: id } });
         if (!word) {
             throw new WordNotFoundException();

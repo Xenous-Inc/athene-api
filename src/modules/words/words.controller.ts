@@ -32,7 +32,7 @@ export class WordsController {
     @ApiOperation({ summary: 'Delete word by ID' })
     @ApiResponse({ status: HttpStatus.OK, type: WordResponse, description: 'Returns word record' })
     @Delete(':id')
-    deleteUser(@Param('id') id: string): Promise<WordResponse> {
-        return this.wordsService.delete(id);
+    deleteWord(@Param('id') id: string): Promise<WordResponse> {
+        return this.wordsService.deleteWord(id);
     }
 }

@@ -5,6 +5,8 @@ export enum AtheneExceptionCode {
     UserNotFound = 602,
     WordAlreadyExist = 603,
     WordNotFound = 604,
+    CategoryAlreadyExist = 607,
+    CategoryNotFound = 608,
 }
 export interface IAtheneExceptionResponse {
     code: AtheneExceptionCode;
