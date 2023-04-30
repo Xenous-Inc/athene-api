@@ -44,10 +44,15 @@ export class WordsService {
         if (!word) {
             throw new WordNotFoundException();
         }
-        return this.prisma.word.update({
+        const updatedWord = this.prisma.word.update({
             where: { id },
-            data: dto,
+            data: {
+                value: dto.value,
+                translation: dto.translation,
+            },
         });
+
+        return updatedWord;
     }
     async delete(id: string) {
         const word = this.prisma.word.findUnique({ where: { id: id } });
