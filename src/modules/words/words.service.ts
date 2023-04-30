@@ -11,7 +11,10 @@ export class WordsService {
     constructor(private readonly prisma: PrismaService) {}
 
     async create(dto: CreateWordDto): Promise<WordResponse> {
-        const word = await this.prisma.word.create({ data: dto });
+        const { value, translation, languageId } = dto;
+        const word = await this.prisma.word.create({
+            data: { value, translation, language: { connect: { id: languageId } } },
+        });
         if (!word) {
             throw new WordAlreadyExistException();
         }
