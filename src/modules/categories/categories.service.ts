@@ -104,11 +104,12 @@ export class CategoriesService {
         if (!word) {
             throw new WordNotFoundException();
         }
-
+        console.log(word);
         const category = await this.prisma.category.update({
             where: { id: id },
             data: { words: { connect: { id: word.id } } },
         });
+        console.log(category);
         if (!category) {
             throw new CategoryNotFoundException();
         }

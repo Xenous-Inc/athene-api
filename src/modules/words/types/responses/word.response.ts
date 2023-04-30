@@ -11,8 +11,6 @@ export class WordResponse implements TSecuredWord {
     isCategorized: boolean;
     @ApiProperty({ description: 'Keeps ID of Language' })
     languageId: string;
-    @ApiProperty({ description: 'Keeps ID of Category', required: false })
-    categoryId: string;
     @ApiProperty({ description: 'When word create' })
     createdAt: Date;
 }
