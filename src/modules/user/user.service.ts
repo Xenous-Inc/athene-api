@@ -12,7 +12,7 @@ import { UserNotFoundException } from '../../exceptions/user/user-not-found.exce
 export class UserService {
     constructor(private readonly prisma: PrismaService) {}
     async createUser(dto: CreateUserDto): Promise<UsersResponse> {
-        const user = await this.prisma.user.create({ data: { ...dto, role: [UserRole.Student] } });
+        const user = await this.prisma.user.create({ data: { ...dto, role: [UserRole.Teacher] } });
         if (!user) {
             throw new UserAlreadyExistException();
         }
