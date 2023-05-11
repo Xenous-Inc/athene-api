@@ -29,7 +29,7 @@ export class WordsService {
     }
     async findWordById(id: string): Promise<WordResponse> {
         const word = await this.prisma.word.findUnique({
-            where: { id: id },
+            where: { id },
         });
         if (!word) {
             throw new WordNotFoundException();
@@ -38,7 +38,7 @@ export class WordsService {
     }
     async update(id: string, dto: UpdateWordDto): Promise<WordResponse> {
         const word = await this.prisma.word.findUnique({
-            where: { id: id },
+            where: { id },
         });
 
         if (!word) {
@@ -54,11 +54,11 @@ export class WordsService {
 
         return updatedWord;
     }
-    async delete(id: string) {
-        const word = this.prisma.word.findUnique({ where: { id: id } });
+    async delete(id: string): Promise<WordResponse> {
+        const word = this.prisma.word.findUnique({ where: { id } });
         if (!word) {
             throw new WordNotFoundException();
         }
-        return word;
+        return this.prisma.word.delete({ where: { id } });
     }
 }
