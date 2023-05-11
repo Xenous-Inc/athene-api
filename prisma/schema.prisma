@@ -43,12 +43,11 @@ model Word {
   id             String           @id @default(uuid())
   value          String
   translation    String
-  isCategorized  Boolean          @default(false)
   languageId     String
   language       Language         @relation(fields: [languageId], references: [id])
   createdAt      DateTime         @default(now())
   users          WordToUser[]
-  categories     Category[]     @relation("CategoriesWord")
+  categories     WordToCategory[]
 }
 
 model Language {
@@ -61,20 +60,20 @@ model Category {
   id             String            @id @default(uuid())
   value          String
   authorId       String
-  words          Word[]   @relation("CategoriesWord")
+  words          WordToCategory[]
   classes        ClassToCategory[]
   CategoryToUser CategoryToUser[]
 }
 
-// model WordToCategory {
-//   word       Word     @relation(fields: [wordId], references: [id])
-//   wordId     String
-//   category   Category @relation(fields: [categoryId], references: [id])
-//   categoryId String
-//   assignedAt DateTime @default(now())
-//
-//   @@id([wordId, categoryId])
-// }
+model WordToCategory {
+  word       Word     @relation(fields: [wordId], references: [id])
+  wordId     String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  assignedAt DateTime @default(now())
+
+  @@id([wordId, categoryId])
+}
 
 model CategoryToUser {
   category   Category @relation(fields: [categoryId], references: [id])

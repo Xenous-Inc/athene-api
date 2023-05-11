@@ -6,19 +6,23 @@ import { CategoryAlreadyExistException } from '../../exceptions/category/categor
 import { CategoryNotFoundException } from '../../exceptions/category/category-not-found.exception';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryToUserResponse } from './types/responses/category-to-user.response';
-import { WordNotFoundException } from '../../exceptions/word/word-not-found.exception';
 import { UserNotFoundException } from '../../exceptions/user/user-not-found.exception';
 import { SubscribeCategoryDto } from './dto/subscribe-category.dto';
 import { WordToCategoryDto } from './dto/word-to-category.dto';
+import { WordAlreadyExistException } from '../../exceptions/word/word-already-exist.exception';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoriesService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async createCategory(id: string, dto: CreateCategoryDto): Promise<CategoryResponse> {
-        const user = await this.prisma.user.findUnique({ where: { id: id } });
-        const category = await this.prisma.category.create({ data: { ...dto, authorId: user.id } });
-        await this.subscribeCategory({ userId: id }, category.id);
+    async createCategory(dto: CreateCategoryDto): Promise<CategoryResponse> {
+        const user = await this.prisma.user.findUnique({ where: { id: dto.authorId } });
+        if (!user) {
+            throw new UserNotFoundException();
+        }
+        const category = await this.prisma.category.create({ data: dto });
+        await this.subscribeCategory({ userId: dto.authorId, categoryId: category.id });
         if (!category) {
             throw new CategoryAlreadyExistException();
         }
@@ -44,7 +48,6 @@ export class CategoriesService {
     }
 
     async getAllCategoriesByUser(userId: string): Promise<CategoryToUserResponse[]> {
-        console.log(userId);
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
         if (!user) {
             throw new UserNotFoundException();
@@ -74,8 +77,8 @@ export class CategoriesService {
         return category;
     }
 
-    async subscribeCategory(dto: SubscribeCategoryDto, id: string): Promise<CategoryToUserResponse> {
-        const category = await this.prisma.category.findUnique({ where: { id: id } });
+    async subscribeCategory(dto: SubscribeCategoryDto): Promise<CategoryToUserResponse> {
+        const category = await this.prisma.category.findUnique({ where: { id: dto.categoryId } });
         if (!category) {
             throw new CategoryNotFoundException();
         }
@@ -92,27 +95,20 @@ export class CategoriesService {
         return userForCategory;
     }
 
-    async addWordToCategory(dto: WordToCategoryDto, id: string): Promise<CategoryResponse> {
-        const word = await this.prisma.word.findUnique({ where: { id: dto.wordId } });
-        // const newWordToCategory = await this.prisma.wordToCategory.create({
-        //     data: {
-        //         wordId: dto.wordId,
-        //         categoryId: id,
-        //     },
-        // });
-        // const word = await this.prisma.word.update({ where: { id: dto.wordId }, data: { categoryId: id } });
-        if (!word) {
-            throw new WordNotFoundException();
+    async addWordToCategory(dto: WordToCategoryDto) {
+        // eslint-disable-next-line init-declarations
+        let wordToCategory;
+        try {
+            wordToCategory = await this.prisma.wordToCategory.create({
+                data: { wordId: dto.wordId, categoryId: dto.categoryId },
+            });
+        } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code == 'P2002') {
+                    throw new WordAlreadyExistException();
+                }
+            }
         }
-        console.log(word);
-        const category = await this.prisma.category.update({
-            where: { id: id },
-            data: { words: { connect: { id: word.id } } },
-        });
-        console.log(category);
-        if (!category) {
-            throw new CategoryNotFoundException();
-        }
-        return category;
+        return wordToCategory;
     }
 }

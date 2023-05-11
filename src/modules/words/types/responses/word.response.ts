@@ -7,8 +7,6 @@ export class WordResponse implements TSecuredWord {
     value: string;
     @ApiProperty({ example: 'мяч', description: 'Keeps the translation word' })
     translation: string;
-    @ApiProperty({ default: false })
-    isCategorized: boolean;
     @ApiProperty({ description: 'Keeps ID of Language' })
     languageId: string;
     @ApiProperty({ description: 'When word create' })

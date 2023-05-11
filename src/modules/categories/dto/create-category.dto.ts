@@ -5,4 +5,7 @@ export class CreateCategoryDto {
     @IsString()
     @ApiProperty({ example: 'sport', description: 'Category name' })
     value: string;
+    @IsString()
+    @ApiProperty({ example: 'Uifsd', description: 'User id' })
+    authorId: string;
 }

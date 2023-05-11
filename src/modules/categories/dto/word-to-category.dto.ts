@@ -5,4 +5,7 @@ export class WordToCategoryDto {
     @IsString()
     @ApiProperty({ example: 'UUi34jhb', description: 'Word id' })
     wordId: string;
+    @IsString()
+    @ApiProperty({ example: 'UUi34jhb', description: 'Category id' })
+    categoryId: string;
 }

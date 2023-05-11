@@ -13,9 +13,9 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) {}
     @ApiOperation({ summary: 'Create category' })
     @ApiResponse({ status: HttpStatus.CREATED, description: 'Returns category record' })
-    @Post(':id')
-    createCategory(@Param('id') id: string, @Body() dto: CreateCategoryDto): Promise<CategoryResponse> {
-        return this.categoriesService.createCategory(id, dto);
+    @Post('/')
+    createCategory(@Body() dto: CreateCategoryDto): Promise<CategoryResponse> {
+        return this.categoriesService.createCategory(dto);
     }
 
     @ApiOperation({ summary: 'Get category by ID' })
@@ -50,14 +50,14 @@ export class CategoriesController {
     }
     @ApiOperation({ summary: 'Subscribe category' })
     @ApiResponse({ status: HttpStatus.OK, description: 'Returns category record' })
-    @Post('subscribe/:id')
-    subscribeCategory(@Param('id') id: string, @Body() dto: SubscribeCategoryDto): Promise<CategoryToUserResponse> {
-        return this.categoriesService.subscribeCategory(dto, id);
+    @Post('subscribe/')
+    subscribeCategory(@Body() dto: SubscribeCategoryDto): Promise<CategoryToUserResponse> {
+        return this.categoriesService.subscribeCategory(dto);
     }
     @ApiOperation({ summary: 'Add a word to category' })
     @ApiResponse({ status: HttpStatus.OK, description: 'Returns words in this category' })
-    @Post('/add/:id')
-    addWordToCategory(@Param('id') id: string, @Body() dto: WordToCategoryDto): Promise<CategoryResponse> {
-        return this.categoriesService.addWordToCategory(dto, id);
+    @Post('add/')
+    addWordToCategory(@Body() dto: WordToCategoryDto) {
+        return this.categoriesService.addWordToCategory(dto);
     }
 }
